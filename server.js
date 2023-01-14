@@ -1,15 +1,16 @@
 // const path = require('path');
 const express = require('express');
-// const colors = require('colors');
+const colors = require('colors');
 const dotenv = require('dotenv').config();
-// const { errorHandler } = require('./middleware/errorMiddleware');
-// const connectDB = require('./config/db');
-const port = process.env.PORT || 4000;
+const { errorHandler } = require('./middleware/errorMiddleware');
+const connectDB = require('./config/db');
+const port = process.env.PORT;
 
-// connectDB();
+connectDB();
 
 const app = express();
 
+//important for seeing req.body
 app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 
@@ -29,6 +30,6 @@ app.use('/api/facilities', require('./routes/facilityRoutes'));
 //   app.get('/', (req, res) => res.send('Please set to production'));
 // }
 
-// app.use(errorHandler);
+app.use(errorHandler);
 
 app.listen(port, () => console.log(`Server started on port ${port}`));
