@@ -33,27 +33,42 @@ const setFacility = asyncHandler(async (req, res) => {
 
     // console.log(req.body.text)
     
-
-    
 })
 
 // @desc    Put facilities
 // @route   PUT /api/facilities/:id
 // @access  Private
 const updateFacility = asyncHandler(async (req, res) => {
-    res.status(200).json({message: `update goals ${req.params.id}`})
-    console.log(req.params)
+
+    const goal = await Goal.findById(req.params.id)
+
+    if (!goal) {
+        res.status(400)
+        throw new Error('Goal not found')
+    }
+
+    const updatedGoal = await Goal.findByIdAndUpdate(req.params.id, req.body, {
+        new: true,
+    })
+    res.status(200).json(updatedGoal)
+    // console.log(req.params)
 })
 
 // @desc    Delete facilities
 // @route   DELETE /api/facilities/:id
 // @access  Private
 const deleteFacility = asyncHandler(async (req, res) => {
-    res.status(200).json({message: `delete goals ${req.params.id}`})
+    const goal = await Goal.findById(req.params.id)
+
+    if (!goal) {
+        res.status(400)
+        throw new Error('Goal not found')
+    }
+
+    await goal.remove()
+
+    res.status(200).json({ id: req.params.id })
 })
-
-
-
 
 module.exports = {
     getFacilities,
